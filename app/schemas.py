@@ -6,6 +6,9 @@ class MenuItemBase(BaseModel):
     price: float
     category: str
     image: str
+    
+    class Config:
+        from_attributes = True
 
 class MenuItemCreate(MenuItemBase):
     pass
@@ -17,4 +20,4 @@ class MenuItemResponse(MenuItemBase):
     id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
