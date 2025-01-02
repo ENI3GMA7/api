@@ -1,8 +1,9 @@
 from fastapi import APIRouter, HTTPException, Depends
 from sqlalchemy.orm import Session
-from database import SessionLocal
-from models import MenuItem
-from schemas import MenuItemCreate, MenuItemUpdate, MenuItemResponse
+from app.database import SessionLocal
+from app.models import MenuItem
+from app.schemas import MenuItemCreate, MenuItemUpdate, MenuItemResponse
+
 
 router = APIRouter()
 
