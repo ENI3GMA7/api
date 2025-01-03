@@ -99,7 +99,7 @@ def delete_menu_item(item_id: int, db: Session = Depends(get_db)):
     return {"message": "Item deleted successfully"}
 
 
-@router.get("/menu-landingpage", response_model=list[MenuItemResponse])
+@router.get("/mostrar-cardapio-prato", response_model=list[MenuItemResponse])
 def get_menu_items(db: Session = Depends(get_db)):
     return db.query(MenuItem).all()
 
