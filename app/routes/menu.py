@@ -21,7 +21,7 @@ def get_db():
     finally:
         db.close()
 
-@router.post("/menu-items", response_model=MenuItemResponse)
+@router.post("/menu-adicinar/", response_model=MenuItemResponse)
 async def add_menu_item(
     request: Request,
     name: str = Form(...),
@@ -52,7 +52,7 @@ async def add_menu_item(
     db.refresh(new_item)
     return new_item
 
-@router.put("/menu-items/{item_id}", response_model=MenuItemResponse)
+@router.put("/menu-editar/{item_id}", response_model=MenuItemResponse)
 async def update_menu_item(
     item_id: int,
     name: str = Form(None),
@@ -85,7 +85,7 @@ async def update_menu_item(
     db.refresh(menu_item)
     return menu_item
 
-@router.delete("/menu-items/{item_id}")
+@router.delete("/menu-deletar/{item_id}")
 def delete_menu_item(item_id: int, db: Session = Depends(get_db)):
     menu_item = db.query(MenuItem).filter(MenuItem.id == item_id).first()
     if not menu_item:
@@ -99,7 +99,7 @@ def delete_menu_item(item_id: int, db: Session = Depends(get_db)):
     return {"message": "Item deleted successfully"}
 
 
-@router.get("/menu-items", response_model=list[MenuItemResponse])
+@router.get("/menu-landingpage", response_model=list[MenuItemResponse])
 def get_menu_items(db: Session = Depends(get_db)):
     return db.query(MenuItem).all()
 
