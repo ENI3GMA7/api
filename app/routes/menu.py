@@ -13,7 +13,7 @@ router = APIRouter()
 # Pasta para armazenar as imagens
 UPLOAD_FOLDER = "items"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-
+app.mount("/images", StaticFiles(directory=UPLOAD_FOLDER), name="images")
 def get_db():
     db = SessionLocal()
     try:
