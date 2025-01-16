@@ -3,3 +3,6 @@ sqlalchemy
 uvicorn
 pydantic
 python-multipart
+python-jose
+passlib
+jwt
