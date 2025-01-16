@@ -7,8 +7,18 @@ from app.models import MenuItem
 from app.schemas import MenuItemCreate, MenuItemUpdate, MenuItemResponse
 import shutil
 import uuid
+from passlib.context import CryptContext
 
+# Contexto de hash para senhas
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 router = APIRouter()
+
+
+
+
+def hash_password(password: str) -> str:
+    return pwd_context.hash(password)
+
 
 # Pasta para armazenar as imagens
 UPLOAD_FOLDER = "items"
@@ -97,6 +107,64 @@ def delete_menu_item(item_id: int, db: Session = Depends(get_db)):
     db.delete(menu_item)
     db.commit()
     return {"message": "Item deleted successfully"}
+
+
+
+
+
+
+
+# Rota para adicionar um administrador
+@router.post("/admin/adicionar", response_model=dict)
+async def add_admin(
+    username: str = Form(...),
+    password: str = Form(...),
+    db: Session = Depends(get_db)
+):
+    # Verifica se o username já existe
+    existing_admin = db.query(Admin).filter(Admin.username == username).first()
+    if existing_admin:
+        raise HTTPException(status_code=400, detail="Usuário já existe.")
+    
+    # Cria o novo administrador
+    hashed_password = hash_password(password)
+    new_admin = Admin(username=username, password=hashed_password)
+    db.add(new_admin)
+    db.commit()
+    db.refresh(new_admin)
+
+    return {"message": "Administrador adicionado com sucesso!", "admin_id": new_admin.id}
+
+# Rota para atualizar um administrador
+@router.put("/admin/atualizar/{admin_id}", response_model=dict)
+async def update_admin(
+    admin_id: int,
+    username: str = Form(None),
+    password: str = Form(None),
+    db: Session = Depends(get_db)
+):
+    # Busca o administrador pelo ID
+    admin = db.query(Admin).filter(Admin.id == admin_id).first()
+    if not admin:
+        raise HTTPException(status_code=404, detail="Administrador não encontrado.")
+
+    # Atualiza os dados fornecidos
+    if username:
+        # Verifica se o novo username já existe para outro admin
+        existing_admin = db.query(Admin).filter(Admin.username == username, Admin.id != admin_id).first()
+        if existing_admin:
+            raise HTTPException(status_code=400, detail="Outro administrador já utiliza este nome de usuário.")
+        admin.username = username
+
+    if password:
+        admin.password = hash_password(password)
+
+    # Salva as alterações no banco de dados
+    db.commit()
+    db.refresh(admin)
+
+    return {"message": "Administrador atualizado com sucesso!", "admin_id": admin.id}
+
 
 
 @router.get("/mostrar-cardapio-prato", response_model=list[MenuItemResponse])
