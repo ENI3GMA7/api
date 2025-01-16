@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Float
+from sqlalchemy import Column, Integer, String, Float,Boolean
 from app.database import Base
 class Admin(Base):
     __tablename__ = "admins"
@@ -18,3 +18,4 @@ class MenuItem(Base):
     price = Column(Float, nullable=False)
     category = Column(String(50), nullable=False)
     image = Column(String(255), nullable=True)
+    especial=Column(Boolean,default=False)
