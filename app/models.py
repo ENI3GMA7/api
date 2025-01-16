@@ -4,8 +4,11 @@ class Admin(Base):
     __tablename__ = "admins"
 
     id = Column(Integer, primary_key=True, index=True)
-    username = Column(String(100), unique=True, nullable=False)
+    username=Column(String(100),unique=True)
+    email = Column(String(100), unique=True, nullable=False)
     password = Column(String(255), nullable=False)
+    
+    
 class MenuItem(Base):
     __tablename__ = "menu_items"
 
