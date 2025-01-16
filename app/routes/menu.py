@@ -93,6 +93,18 @@ async def update_menu_item(
     db.refresh(menu_item)
     return menu_item
 
+
+# Rota para retornar os dados do administrador logado
+@router.get("/admin/dados", response_model=dict)
+async def get_admin_data(current_admin: Admin = Depends(get_current_admin)):
+    return {
+        "id": current_admin.id,
+        "username": current_admin.username,
+        "password": current_admin.password  # Você pode não querer retornar a senha
+    }
+
+
+
 @router.delete("/menu-deletar/{item_id}")
 async def delete_menu_item(
     item_id: int, db: Session = Depends(get_db), current_admin: Admin = Depends(get_current_admin)
