@@ -2,14 +2,15 @@ from fastapi import FastAPI
 from app.routes import menu
 from app.database import Base, engine
 from fastapi.middleware.cors import CORSMiddleware
-
+from fastapi.staticfiles import StaticFiles
+import os
 # Cria as tabelas no banco de dados
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
 
-
+app.mount("/images", StaticFiles(directory="items"), name="images")
 
 app.add_middleware(
     CORSMiddleware,
