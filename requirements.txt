@@ -4,3 +4,4 @@ sqlalchemy
 pydantic
 passlib[bcrypt]
 python-jose
+PyJWT==2.6.0
