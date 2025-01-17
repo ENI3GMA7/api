@@ -43,7 +43,7 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="api/login")
 
 # Função para obter o admin atual a partir do token
 
-@router.post("/login", response_model=dict)
+@router.post("/login")
 async def login(
     username: str = Form(...),
     password: str = Form(...),
